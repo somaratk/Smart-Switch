@@ -1,0 +1,5 @@
+switch_state 8
+switch_mode 12
+time_to_switch_on 15
+time_to_switch_off 18
+daylight_thresh 21

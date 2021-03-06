@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hardware>
+	<!-- disable sleep mode oscillator. ppm MUST be 30 -->
+	<sleeposc enable="true" ppm="30" /> 
+	<!-- enable script mode -->
+	<script enable="true" />
+	<!-- set TX power to max (~ 0 dBm) -->
+	<txpower power="14" bias="5" />
+</hardware>

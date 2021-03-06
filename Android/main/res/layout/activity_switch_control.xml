@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/connectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/connect_button_text"
+        android:onClick="onConnect"
+        app:layout_constraintEnd_toStartOf="@+id/switchStateText"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/connectStateText"
+        android:layout_width="196dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:gravity="center"
+        android:text="@string/connect_state_text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/connectButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/switchStateText"
+        android:layout_width="184dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="56dp"
+        android:text="@string/switch_state_text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/switchStateSwitch"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connectButton"
+        tools:padding="5dp" />
+
+    <Switch
+        android:id="@+id/switchStateSwitch"
+        android:layout_width="98dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="8dp"
+        android:enabled="false"
+        android:onClick="onFlipSwitch"
+        android:textOff="@string/switch_off_text"
+        android:textOn="@string/switch_on_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/switchStateText"
+        app:layout_constraintTop_toBottomOf="@+id/connectStateText"
+        tools:padding="5dp" />
+
+    <TextView
+        android:id="@+id/scheduleText"
+        android:layout_width="184dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="56dp"
+        android:text="@string/schedule_text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/scheduleSwitch"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchStateText"
+        tools:padding="5dp" />
+
+    <Switch
+        android:id="@+id/scheduleSwitch"
+        android:layout_width="98dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="8dp"
+        android:enabled="false"
+        android:onClick="onScheduleSwitchClick"
+        android:textOff="@string/switch_off_text"
+        android:textOn="@string/switch_on_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/scheduleText"
+        app:layout_constraintTop_toBottomOf="@+id/switchStateSwitch"
+        tools:padding="5dp" />
+
+    <TextView
+        android:id="@+id/switchOnTimeText"
+        android:layout_width="184dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="56dp"
+        android:text="@string/switch_on_time_text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/switchOnTime"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scheduleText"
+        tools:padding="5dp" />
+
+    <TextView
+        android:id="@+id/switchOnTime"
+        android:layout_width="98dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="8dp"
+        android:enabled="false"
+        android:onClick="onSwitchOnTimeClick"
+        android:text="@string/switch_on_time"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/switchOnTimeText"
+        app:layout_constraintTop_toBottomOf="@+id/scheduleSwitch"
+        tools:padding="5dp" />
+
+    <TextView
+        android:id="@+id/switchOffTimeText"
+        android:layout_width="184dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="56dp"
+        android:text="@string/switch_off_time_text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/switchOffTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchOnTimeText"
+        tools:padding="5dp" />
+
+    <TextView
+        android:id="@+id/switchOffTime"
+        android:layout_width="98dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="8dp"
+        android:enabled="false"
+        android:onClick="onSwitchOffTimeClick"
+        android:text="@string/switch_off_time"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/switchOffTimeText"
+        app:layout_constraintTop_toBottomOf="@+id/switchOnTime"
+        tools:padding="5dp" />
+
+    <TextView
+        android:id="@+id/duskToDawnText"
+        android:layout_width="184dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="56dp"
+        android:text="@string/dusk_to_dawn_text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/duskToDawnSwitch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchOffTimeText"
+        tools:padding="5dp" />
+
+    <Switch
+        android:id="@+id/duskToDawnSwitch"
+        android:layout_width="98dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="8dp"
+        android:enabled="false"
+        android:onClick="onDuskToDawnSwitchClick"
+        android:textOff="@string/switch_off_text"
+        android:textOn="@string/switch_on_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/duskToDawnText"
+        app:layout_constraintTop_toBottomOf="@+id/switchOffTime"
+        tools:padding="5dp" />
+
+    <TextView
+        android:id="@+id/duskToSwitchOffText"
+        android:layout_width="184dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="56dp"
+        android:text="@string/dusk_to_switch_off_text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/duskToSwitchOffSwitch"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/duskToDawnText"
+        tools:padding="5dp" />
+
+    <Switch
+        android:id="@+id/duskToSwitchOffSwitch"
+        android:layout_width="98dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="8dp"
+        android:enabled="false"
+        android:onClick="onDuskToSwitchOffSwitchClick"
+        android:textOff="@string/switch_off_text"
+        android:textOn="@string/switch_on_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/duskToSwitchOffText"
+        app:layout_constraintTop_toBottomOf="@+id/duskToDawnSwitch"
+        tools:padding="5dp" />
+
+    <TextView
+        android:id="@+id/daylightThreshText"
+        android:layout_width="184dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="56dp"
+        android:text="@string/daylight_thresh_text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/daylightThresh"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/duskToSwitchOffText"
+        tools:padding="5dp" />
+
+    <TextView
+        android:id="@+id/daylightThresh"
+        android:layout_width="98dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="8dp"
+        android:enabled="false"
+        android:onClick="onDaylightThreshClick"
+        android:text="@string/daylight_thresh"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/daylightThreshText"
+        app:layout_constraintTop_toBottomOf="@+id/duskToSwitchOffSwitch"
+        tools:padding="5dp" />
+
+</android.support.constraint.ConstraintLayout>

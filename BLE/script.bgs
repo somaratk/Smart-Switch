@@ -1,0 +1,214 @@
+# This code is for the BLE113 on the smart switch.
+
+const OFF = $0000
+const ON = $2867
+const SW1 = $01
+const LIGHT_SENSOR = $01
+const MODE_DEFAULT = $0000
+const MODE_SCHEDULE = $1111
+const MODE_DUSK_DAWN = $0101
+const MODE_DUSK_OFF = $1010
+const LIGHT_SENSOR_HYST = 5
+
+# global variables
+dim mode
+dim timeToOn
+dim timeToOff
+dim daylightThresh
+dim tHandle
+dim tOffset
+dim tResult
+dim tValue_len
+dim tValue_data
+
+# Boot Event listener
+event system_boot(major, minor, patch, build, ll_version, protocol_version, hw)
+	
+    # set variables
+    mode = MODE_DEFAULT
+    timeToOn = $0001
+    timeToOff = $0003
+    daylightThresh = $0032
+	
+    # configure switch pin as outputs and turn off
+	call hardware_io_port_write(0, SW1, $00)
+	call hardware_io_port_config_direction(0, SW1)
+    
+    # start timer. Continuous mode. Generate event every 1 minute
+    call hardware_set_soft_timer(1966080, 1, 0)
+    
+    # set bondable mode
+    call sm_set_bondable_mode(1)
+    
+    # set advertisement parameters
+    call gap_set_adv_parameters($20, $20, $07)
+
+	# start advertising to establish connection
+	call gap_set_mode(gap_general_discoverable, gap_undirected_connectable)
+end
+
+# Write attribute event by remote device
+event attributes_value(connection, reason, handle, offset, value_len, value_data)
+
+    # switch state
+    if(handle = switch_state) then
+        if(value_data(0:value_len) = OFF) then
+            # set switch to OFF
+            call hardware_io_port_write(0, SW1, $00)
+            return
+        end if
+        if(value_data(0:value_len) = ON) then
+            # set switch to ON
+            call hardware_io_port_write(0, SW1, $01)
+            return
+        end if
+    end if
+    
+    # switch mode
+    if(handle = switch_mode) then
+        if(value_data(0:value_len) = MODE_DEFAULT) then
+            # set mode to default
+            mode = MODE_DEFAULT
+            return
+        end if
+        if(value_data(0:value_len) = MODE_SCHEDULE) then
+            # set mode to schedule
+            mode = MODE_SCHEDULE
+            return
+        end if
+        if(value_data(0:value_len) = MODE_DUSK_DAWN) then
+            # set mode to dusk to dawn
+            mode = MODE_DUSK_DAWN
+            return
+        end if
+        if(value_data(0:value_len) = MODE_DUSK_OFF) then
+            # set mode to dusk to switch off
+            mode = MODE_DUSK_OFF
+            return
+        end if
+    end if
+    
+    # time to switch on
+    if(handle = time_to_switch_on) then
+        timeToOn = value_data(0:value_len)
+        call attributes_user_write_response(connection, $00)
+        return
+    end if
+    
+    # time to switch off
+    if(handle = time_to_switch_off) then
+        timeToOff = value_data(0:value_len)
+        call attributes_user_write_response(connection, $00)
+        return
+    end if
+    
+    # daylight threshold
+    if(handle = daylight_thresh) then
+        daylightThresh = value_data(0:value_len)
+        call attributes_user_write_response(connection, $00)
+        return
+    end if
+end
+
+# Remote device reads switch on time or switch off time
+event attributes_user_read_request(connection, handle, offset, maxsize)
+
+    if(handle = time_to_switch_on) then
+        call attributes_user_read_response(connection, $00, 4, timeToOn)
+        return
+    end if
+    
+    if(handle = time_to_switch_off) then
+        call attributes_user_read_response(connection, $00, 4, timeToOff)
+        return
+    end if
+    
+    if(handle = daylight_thresh) then
+        call attributes_user_read_response(connection, $00, 4, daylightThresh)
+        return
+    end if
+
+end
+
+# ADC read result - light sensor reading
+event hardware_adc_result(input, value)
+
+    # light sensor
+    if (input = LIGHT_SENSOR) then
+        # check for dusk condition
+        if((value >> 9) < daylightThresh) then
+            if (mode = MODE_DUSK_DAWN) then
+                # check if switch is off
+                call attributes_read(switch_state, 0)(tHandle, tOffset, tResult, tValue_len, tValue_data)
+                if(tValue_data != ON) then
+                    # turn on switch
+                    call hardware_io_port_write(0, SW1, $01)
+                    call attributes_write(switch_state, 0, 4, ON)
+                end if
+                return
+            end if
+            if (mode = MODE_DUSK_OFF) then
+                # check if switch is off
+                call attributes_read(switch_state, 0)(tHandle, tOffset, tResult, tValue_len, tValue_data)
+                if((tValue_data != ON) && (timeToOff < 600)) then
+                    # turn on switch
+                    call hardware_io_port_write(0, SW1, $01)
+                    call attributes_write(switch_state, 0, 4, ON)
+                end if
+                return
+            return
+            end if
+        end if
+        
+        # check for dawn condition
+        if((value >> 9) > (daylightThresh + LIGHT_SENSOR_HYST)) then
+            if (mode = MODE_DUSK_DAWN) then
+                # check if switch is on
+                call attributes_read(switch_state, 0)(tHandle, tOffset, tResult, tValue_len, tValue_data)
+                if(tValue_data != OFF) then
+                    # turn off switch
+                    call hardware_io_port_write(0, SW1, $00)
+                    call attributes_write(switch_state, 0, 4, OFF)
+                end if
+                return
+            end if
+            return
+        end if
+    end if
+end
+
+# Timer event listener. Executes once per minute
+event hardware_soft_timer(handle)
+    
+    if (handle = 1) then
+        timeToOn = timeToOn - 1
+        timeToOff = timeToOff - 1
+        if (timeToOn = 0) then
+            if (mode = MODE_SCHEDULE) then
+                # turn on switch
+                call hardware_io_port_write(0, SW1, $01)
+                call attributes_write(switch_state, 0, 4, ON)
+            end if
+            timeToOn = $05A0 # set to next day
+        end if
+        if (timeToOff = 0) then
+            if (mode = MODE_SCHEDULE || mode = MODE_DUSK_OFF) then
+                # turn off switch
+                call hardware_io_port_write(0, SW1, $00)
+                call attributes_write(switch_state, 0, 4, OFF)
+            end if
+            timeToOff = $05A0 # set to next day
+        end if
+        if (mode = MODE_DUSK_DAWN || mode = MODE_DUSK_OFF) then
+            # read light sensor
+            call hardware_adc_read(LIGHT_SENSOR, 0, 2)
+        end if
+    end if
+end
+
+# Disconnect event listener
+event connection_disconnected(connection, reason)
+
+	# if disconnected start advertising again
+	call gap_set_mode(gap_general_discoverable, gap_undirected_connectable)
+end

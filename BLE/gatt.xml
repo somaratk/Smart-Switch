@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+	<!-- Generic Access Profile service -->
+	<service uuid="1800">
+		<description>Generic Access Profile</description>
+		<!-- device name -->
+		<characteristic uuid="2a00">
+			<properties read="true" const="true" />
+			<value>Smart Switch</value>
+		</characteristic>
+		<!-- device appearence -->
+		<characteristic uuid="2a01">
+			<properties read="true" const="true" />
+			<value type="hex">0000</value>
+		</characteristic>
+	</service>
+	
+	<!-- Switch Service -->
+	<service uuid="9d3b8366-4853-11e6-beb8-9e71128cae77" advertise="true">
+		<description>Switch Service</description>
+		<characteristic uuid="9d3b8366-4853-11e6-beb8-9e71128c0001" id="switch_state">
+			<description>Switch State</description>
+			<properties read="true" write="true" notify="true" />
+			<value length="4" type="hex" />
+		</characteristic>
+        <characteristic uuid="9d3b8366-4853-11e6-beb8-9e71128c0002" id="switch_mode">
+			<description>Switch Mode</description>
+			<properties read="true" write="true" />
+			<value length="4" type="hex" />
+		</characteristic>
+        <characteristic uuid="9d3b8366-4853-11e6-beb8-9e71128c0003" id="time_to_switch_on">
+			<description>Time to switch on</description>
+			<properties read="true" write="true" />
+			<value length="4" type="user" />
+		</characteristic>
+        <characteristic uuid="9d3b8366-4853-11e6-beb8-9e71128c0004" id="time_to_switch_off">
+			<description>Time to switch off</description>
+			<properties read="true" write="true" />
+			<value length="4" type="user" />
+		</characteristic>
+        <characteristic uuid="9d3b8366-4853-11e6-beb8-9e71128c0005" id="daylight_thresh">
+			<description>Daylight threshold</description>
+			<properties read="true" write="true" />
+			<value length="4" type="user" />
+		</characteristic>
+	</service>
+	
+</configuration>
+		

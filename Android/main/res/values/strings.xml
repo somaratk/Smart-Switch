@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Smart Switch</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_remove">Remove</string>
+    <string name="connect_button_text">Connect</string>
+    <string name="connect_state_text">Not Connected</string>
+    <string name="connected_state_text">Connected</string>
+    <string name="switch_state_text">Switch State</string>
+    <string name="switch_on_text">On</string>
+    <string name="switch_off_text">Off</string>
+    <string name="schedule_text">Schedule</string>
+    <string name="switch_on_time_text">Switch on time</string>
+    <string name="switch_on_time">06:00 PM</string>
+    <string name="switch_off_time_text">Switch off time</string>
+    <string name="switch_off_time">12:00 AM</string>
+    <string name="dusk_to_dawn_text">Dusk to Dawn</string>
+    <string name="dusk_to_switch_off_text">Dusk to Switch off</string>
+    <string name="unknown_device_text">Unknown Device</string>
+    <string name="daylight_thresh_text">Daylight Threshold</string>
+    <string name="daylight_thresh">50</string>
+</resources>
